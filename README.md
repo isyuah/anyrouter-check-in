@@ -335,6 +335,10 @@ PROVIDERS={"agentrouter":{"use_proxy":true}}
 - `BARK_KEY`: Bark 应用的 Key（APP 打开时即可看到）
 - `BARK_SERVER`: 自建 Bark 服务器地址 (可选，默认: https://api.day.app)
 
+### Discord Bot
+
+- `DISCORD_WEBHOOK`: Discord 频道的 Webhook 地址
+
 配置步骤：
 
 1. 在仓库的 Settings -> Environments -> production -> Environment secrets 中添加上述环境变量

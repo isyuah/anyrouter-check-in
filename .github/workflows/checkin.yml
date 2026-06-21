@@ -60,8 +60,15 @@ jobs:
 
     - name: 安装 CloakBrowser
       run: |
-        uv run python -m cloakbrowser install
-        echo "✅ CloakBrowser 安装完成"
+        # cloakbrowser install 在收尾自检时会在无头 CI 环境段错误(退出码 139),
+        # 但二进制此时已下载/校验完成。容忍该崩溃,改为校验二进制是否真实存在。
+        uv run python -m cloakbrowser install || echo "⚠️ install 退出码非 0(已知的 CI 自检段错误),继续校验二进制"
+        CHROME_BIN="$(find ~/.cloakbrowser -type f -name chrome | head -n1)"
+        if [ -z "$CHROME_BIN" ] || [ ! -x "$CHROME_BIN" ]; then
+          echo "❌ 未找到可执行的 CloakBrowser 二进制,安装确实失败"
+          exit 1
+        fi
+        echo "✅ CloakBrowser 安装完成: $CHROME_BIN"
 
     - name: 恢复余额历史缓存
       uses: actions/cache@v5
